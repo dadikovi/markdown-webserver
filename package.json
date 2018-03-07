@@ -1,0 +1,17 @@
+{
+  "name": "markdown-webserver",
+  "version": "1.0.0",
+  "description": "This is a simple application which can turn a markdown directory structure to a webserver",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "json": "^9.0.6",
+    "marked": "^0.3.17",
+    "mustache": "^2.3.0"
+  }
+}
