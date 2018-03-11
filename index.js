@@ -11,7 +11,7 @@ var ErrorHandler = require('./ErrorHandler');
 var dirLoader;
 var templEngine;
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
@@ -28,7 +28,7 @@ app.get('/*', function (req, res) {
     res.send(responseHTML);
 })
 
-app.listen(80, function() {
+app.listen(80, function () {
     dirLoader = new DirectoryLoader();
     templEngine = new TemplateEngine();
 
@@ -42,30 +42,30 @@ function reset() {
     dirLoader.reset();
 }
 
-function getContent(path){
-    if (path === "/" || path === "" ) {
+function getContent(path) {
+    if (path === "/" || path === "") {
         return marked(ErrorHandler.getDefaultContent(dirLoader));
-    } else if(path.startsWith("/")) {
-        path=path.substr(1);
+    } else if (path.startsWith("/")) {
+        path = path.substr(1);
     }
-    
+
     try {
         var content_raw = dirLoader.getContent(path);
-    } catch(e) {
+    } catch (e) {
         if (e.reason !== undefined && e.reason === "NOT_FOUND") {
             return marked(ErrorHandler.getNotFoundContent(dirLoader));
         }
     }
-    
+
     if (content_raw === undefined || content_raw === null) {
         return marked(ErrorHandler.getEmptyContent(dirLoader));
     }
     return marked(content_raw);
 }
 
-function getResponseHTML(content="") {
+function getResponseHTML(content = "") {
     var markdownStructure = dirLoader.getMarkdownStructure();
-    var copyright = getCopyright(); 
+    var copyright = getCopyright();
     var explorer = templEngine.renderExplorer(markdownStructure);
     return templEngine.renderMain({
         name: markdownStructure.name,
@@ -80,18 +80,19 @@ function getCopyright() {
     try {
         copy_raw = dirLoader.getUserTemplate("COPYRIGHT.md");
         copy = marked(copy_raw.content);
-    } catch(e) {}
+    } catch (e) {}
 
     return copy;
 }
+
 function readDirectory() {
     var rootPath = parseRootPath()
 
     try {
         /* Just to check if this is a valid directory */
-        fs.readdirSync(rootPath);        
+        fs.readdirSync(rootPath);
         dirLoader.parseDir(rootPath);
-    } catch(err) {
+    } catch (err) {
         console.log("ERROR - The root markdown directory path you defined is invalid! " + err);
         process.exit();
     }
@@ -100,13 +101,13 @@ function readDirectory() {
 function parseRootPath() {
     var rootPath = "";
 
-    for(var i=0; i<process.argv.length; i++) {
-        if(process.argv[i] === "-p") {
-            rootPath = process.argv[i+1];
+    for (var i = 0; i < process.argv.length; i++) {
+        if (process.argv[i] === "-p") {
+            rootPath = process.argv[i + 1];
         }
     }
 
-    if(rootPath === "") {
+    if (rootPath === "") {
         console.log("ERROR - Please define the path of your root markdown directory with -p option!");
         process.exit();
     } else {

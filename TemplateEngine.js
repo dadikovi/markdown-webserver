@@ -4,8 +4,7 @@ var Mustache = require('mustache');
 
 module.exports = class TemplateEngine {
     constructor() {
-        this.templates = [
-            {
+        this.templates = [{
                 name: "explorer",
                 content: null
             },
@@ -16,22 +15,22 @@ module.exports = class TemplateEngine {
         ];
     }
     init() {
-        this.templates.forEach(function(template) {
+        this.templates.forEach(function (template) {
             template.content = fs.readFileSync("templates/" + template.name + ".mustache", "utf8");
         });
     }
     getTemplateContent(name) {
         var ret = "";
-        this.templates.forEach(function(template) {
-            if(template.name === name) {
+        this.templates.forEach(function (template) {
+            if (template.name === name) {
                 ret = template.content;
             }
         });
 
-        if(ret === "") {
+        if (ret === "") {
             console.log("WARNING! Template with name " + name + " was not found!");
         }
-        
+
         return ret;
     }
     renderExplorer(data) {

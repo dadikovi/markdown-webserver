@@ -1,7 +1,9 @@
 var fs = require('fs');
 const path = require('path');
 var BreakException = {};
-var NotFoundException = {reason: "NOT_FOUND"};
+var NotFoundException = {
+    reason: "NOT_FOUND"
+};
 
 module.exports = class DirectoryLoader {
 
@@ -12,13 +14,16 @@ module.exports = class DirectoryLoader {
     parseDir(rootPath) {
         var dirName = this.parseName(rootPath);
         this.templateDir = null;
-        this.markdownStructure = {name: dirName, files: this.discover(rootPath, "", [])};
+        this.markdownStructure = {
+            name: dirName,
+            files: this.discover(rootPath, "", [])
+        };
 
-        this.scheduleNextParse(this, rootPath);        
+        this.scheduleNextParse(this, rootPath);
     }
 
     scheduleNextParse(dirLoader, rootPath) {
-        setTimeout(function() {
+        setTimeout(function () {
             dirLoader.parseDir(rootPath);
         }, DirectoryLoader.REFRESH_TIMEOUT);
         console.log("INFO - state refreshed.");
@@ -29,31 +34,33 @@ module.exports = class DirectoryLoader {
         var files = fs.readdirSync(dir);
         var dirLoader = this;
 
-        files.forEach(function(file) {
+        files.forEach(function (file) {
             if (fs.statSync(path.join(dir, file)).isDirectory()) {
-                if(file === ".markdown-webserver") {
+                if (file === ".markdown-webserver") {
                     console.log("INFO - user-defined templates found!");
                     dirLoader.templateDir = {
-                        files: dirLoader.discover(path.join(dir, file), rel+"/"+file, [])};
-                } else {          
+                        files: dirLoader.discover(path.join(dir, file), rel + "/" + file, [])
+                    };
+                } else {
                     mdStruct.push({
-                        name: file, 
-                        path: null, 
-                        content: null, 
-                        files: dirLoader.discover(path.join(dir, file), rel+"/"+file, [])});
-                    if(mdStruct[mdStruct.length - 1].files.length === 0) {
+                        name: file,
+                        path: null,
+                        content: null,
+                        files: dirLoader.discover(path.join(dir, file), rel + "/" + file, [])
+                    });
+                    if (mdStruct[mdStruct.length - 1].files.length === 0) {
                         mdStruct.splice(mdStruct.length - 1, 1);
                     }
                 }
-            }
-            else {
-                if(file.match(/\.(md|txt|markdown)$/i)) {
+            } else {
+                if (file.match(/\.(md|txt|markdown)$/i)) {
                     mdStruct.push({
-                        name: file, 
-                        path: rel+"/"+file,
+                        name: file,
+                        path: rel + "/" + file,
                         content: fs.readFileSync(path.join(dir, file), 'utf8'),
-                        files:null});
-                    }
+                        files: null
+                    });
+                }
             }
         });
 
@@ -67,7 +74,7 @@ module.exports = class DirectoryLoader {
     getContent(path) {
         var levels = path.split("/");
         var content_i = this.markdownStructure;
-        for(var i=0; i<levels.length; i++) {
+        for (var i = 0; i < levels.length; i++) {
             content_i = this.get(content_i, decodeURIComponent(levels[i]));
             content_i.isSelectedParent = true;
         }
@@ -81,16 +88,16 @@ module.exports = class DirectoryLoader {
     }
 
     resetSelectedState() {
-        DirectoryLoader.doRecursive(this.markdownStructure, function(file) {
+        DirectoryLoader.doRecursive(this.markdownStructure, function (file) {
             file.isSelected = false;
             file.isSelectedParent = false;
         })
     }
 
     static doRecursive(element, method) {
-        element.files.forEach(function(file) {
+        element.files.forEach(function (file) {
             method(file);
-            if(file.files !== null) {
+            if (file.files !== null) {
                 DirectoryLoader.doRecursive(file, method);
             }
         });
@@ -104,17 +111,17 @@ module.exports = class DirectoryLoader {
         var value = undefined;
 
         try {
-            struct.files.forEach(function(file){
-                if(file.name === key) {
+            struct.files.forEach(function (file) {
+                if (file.name === key) {
                     value = file;
                     throw BreakException;
                 }
             });
-        } catch(e) {
-            if(e !== BreakException) throw e;
+        } catch (e) {
+            if (e !== BreakException) throw e;
         }
 
-        if(value === undefined) {
+        if (value === undefined) {
             console.log("WARNING! Requested key did not found: " + key);
             throw NotFoundException;
         } else {
@@ -127,12 +134,12 @@ module.exports = class DirectoryLoader {
     }
 
     compareDirectory(a, b) {
-        if(a.files !== null && b.files === null) {
+        if (a.files !== null && b.files === null) {
             return -1;
-        } else if(b.files !== null && a.files === null) {
+        } else if (b.files !== null && a.files === null) {
             return 1;
         } else {
-            return a.name-b.name;
+            return a.name - b.name;
         }
     }
 };
