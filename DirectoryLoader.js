@@ -5,10 +5,23 @@ var NotFoundException = {reason: "NOT_FOUND"};
 
 module.exports = class DirectoryLoader {
 
+    static get REFRESH_TIMEOUT() {
+        return 5 * 60 * 1000;
+    }
+
     parseDir(rootPath) {
         var dirName = this.parseName(rootPath);
         this.templateDir = null;
         this.markdownStructure = {name: dirName, files: this.discover(rootPath, "", [])};
+
+        this.scheduleNextParse(this, rootPath);        
+    }
+
+    scheduleNextParse(dirLoader, rootPath) {
+        setTimeout(function() {
+            dirLoader.parseDir(rootPath);
+        }, DirectoryLoader.REFRESH_TIMEOUT);
+        console.log("INFO - state refreshed.");
     }
 
     discover(dir, rel, mdStruct) {

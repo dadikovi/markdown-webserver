@@ -25,4 +25,8 @@ There is not much configuration possibility yet...
 - The layout of the application is declared in `.mustache` files in _templates_ directory.
 - The `less` files are in _resources_ directory.
 
+## Other information
+
+- The server use cache for the files, the cache timeout is 5 minutes.
+
 Feel free to use this code for any purpose, pull requests are also welcomed.
