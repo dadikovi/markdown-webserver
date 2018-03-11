@@ -13,6 +13,12 @@ function expand(obj) {
     parent.classList.remove("explorer-collapsed");
     obj.setAttribute("onClick", "collapse(this);");
 }
+function expandSelected() {
+    document.querySelectorAll("li.expandable > p.selectedParent").forEach(function(obj){
+        expand(obj);
+    });
+}
 
 console.log("UI started.");
 collapseAll();
+expandSelected();

@@ -21,6 +21,7 @@ app.use(function(req, res, next) {
 app.use(express.static('resources'));
 
 app.get('/*', function (req, res) {
+    reset();
     var content = getContent(req.path);
     var responseHTML = getResponseHTML(content);
     res.send(responseHTML);
@@ -35,6 +36,10 @@ app.listen(80, function() {
 
     console.log('INFO - markdown-webserver is listening on port 80!');
 });
+
+function reset() {
+    dirLoader.reset();
+}
 
 function getContent(path){
     if (path === "/" || path === "" ) {

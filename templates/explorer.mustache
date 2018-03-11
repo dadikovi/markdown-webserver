@@ -2,7 +2,7 @@
 {{#files}}	
 	<li {{#files}}class="expandable"{{/files}}>
 		{{#path}}<a href="{{path}}">{{/path}}
-		<p {{#files}}class="expandable-label" onclick="expand(this);"{{/files}}>{{name}}</p>
+		<p class="explorer-level {{#files.length}}expandable-label{{/files.length}} {{#isSelectedParent}}selectedParent{{/isSelectedParent}} {{#isSelected}}selected{{/isSelected}}"{{#files}} onclick="expand(this);"{{/files}}>{{name}}</p>
 		{{#path}}</a>{{/path}}
 		{{>explorer}}
 	</li>

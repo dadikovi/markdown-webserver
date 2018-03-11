@@ -21,6 +21,9 @@ module.exports = class DirectoryLoader {
                      path: null, 
                      content: null, 
                      files: DirectoryLoader.discover(path.join(dir, file), rel+"/"+file, [])});
+                if(mdStruct[mdStruct.length - 1].files.length === 0) {
+                    mdStruct.splice(mdStruct.length - 1, 1);
+                }
             }
             else {
                 mdStruct.push({
@@ -31,7 +34,7 @@ module.exports = class DirectoryLoader {
             }
         });
 
-        return mdStruct;
+        return mdStruct.sort(this.compareDirectory);
     }
 
     getMarkdownStructure() {
@@ -43,9 +46,31 @@ module.exports = class DirectoryLoader {
         var content_i = this.markdownStructure;
         for(var i=0; i<levels.length; i++) {
             content_i = this.get(content_i, decodeURIComponent(levels[i]));
+            content_i.isSelectedParent = true;
         }
-        console.log(content_i.content);
+        content_i.isSelectedParent = false;
+        content_i.isSelected = true;
         return content_i.content;
+    }
+
+    reset() {
+        this.resetSelectedState();
+    }
+
+    resetSelectedState() {
+        DirectoryLoader.doRecursive(this.markdownStructure, function(file) {
+            file.isSelected = false;
+            file.isSelectedParent = false;
+        })
+    }
+
+    static doRecursive(element, method) {
+        element.files.forEach(function(file) {
+            method(file);
+            if(file.files !== null) {
+                DirectoryLoader.doRecursive(file, method);
+            }
+        });
     }
 
     get(struct, key) {
@@ -72,5 +97,15 @@ module.exports = class DirectoryLoader {
 
     parseName(rootPath) {
         return path.basename(rootPath);
+    }
+
+    compareDirectory(a, b) {
+        if(a.files !== null && b.files === null) {
+            return -1;
+        } else if(b.files !== null && a.files === null) {
+            return 1;
+        } else {
+            return a.name-b.name;
+        }
     }
 };

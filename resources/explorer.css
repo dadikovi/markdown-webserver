@@ -31,3 +31,22 @@ ul.explorer li.explorer-collapsed > ul > li {
 ul.explorer li.explorer-collapsed > p {
     background-image: url("collapsed.png");
 }
+
+ul.explorer p.selected {
+    background-color: #888;
+    padding: 2px 5px;
+    color: #fff;
+}
+
+p.selected::after {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    right: -11px;
+    margin: -2px;
+    z-index: 1;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 13px solid #888;
+}
