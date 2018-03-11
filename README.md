@@ -14,7 +14,13 @@ The server will discover the given directory recursively, and will serve the fou
 
 ## Configuration
 
-There is not much configuration possibility yet.
+There is not much configuration possibility yet...
+
+- You can create a `.markdown-webserver` directory in the root directory. The server will recognize the following files in this directory:
+    - `COPYRIGHT.md` - rendered at the bottom of the left menu
+    - `EMPTY.md` - rendered if selected content is empty.
+    - `HOME.md` - rendered if the requested path is `localhost/`
+    - `NOTFOUND.md` - rendered if the selected content was not found.
 
 - The layout of the application is declared in `.mustache` files in _templates_ directory.
 - The `less` files are in _resources_ directory.

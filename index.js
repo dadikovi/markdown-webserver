@@ -6,6 +6,7 @@ var marked = require('marked');
 var app = express();
 var DirectoryLoader = require('./DirectoryLoader');
 var TemplateEngine = require('./TemplateEngine');
+var ErrorHandler = require('./ErrorHandler');
 
 var dirLoader;
 var templEngine;
@@ -43,7 +44,7 @@ function reset() {
 
 function getContent(path){
     if (path === "/" || path === "" ) {
-        return getDefaultContent();
+        return marked(ErrorHandler.getDefaultContent(dirLoader));
     } else if(path.startsWith("/")) {
         path=path.substr(1);
     }
@@ -52,34 +53,36 @@ function getContent(path){
         var content_raw = dirLoader.getContent(path);
     } catch(e) {
         if (e.reason !== undefined && e.reason === "NOT_FOUND") {
-            return getNotFoundContent();
+            return marked(ErrorHandler.getNotFoundContent(dirLoader));
         }
     }
     
     if (content_raw === undefined || content_raw === null) {
-        return getEmptyContent();
+        return marked(ErrorHandler.getEmptyContent(dirLoader));
     }
     return marked(content_raw);
 }
 
-function getNotFoundContent() {
-    "This content was not found.";
-}
-function getEmptyContent() {
-    return "TODO empty content";
-}
-function getDefaultContent() {
-    return "TODO default content";
-}
-
 function getResponseHTML(content="") {
     var markdownStructure = dirLoader.getMarkdownStructure();
+    var copyright = getCopyright(); 
     var explorer = templEngine.renderExplorer(markdownStructure);
     return templEngine.renderMain({
         name: markdownStructure.name,
         explorer: explorer,
-        content: content
+        content: content,
+        copyright: copyright
     });
+}
+
+function getCopyright() {
+    var copy = "";
+    try {
+        copy_raw = dirLoader.getUserTemplate("COPYRIGHT.md");
+        copy = marked(copy_raw.content);
+    } catch(e) {}
+
+    return copy;
 }
 function readDirectory() {
     var rootPath = parseRootPath()

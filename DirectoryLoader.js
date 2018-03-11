@@ -7,30 +7,40 @@ module.exports = class DirectoryLoader {
 
     parseDir(rootPath) {
         var dirName = this.parseName(rootPath);
-        this.markdownStructure = {name: dirName, files: DirectoryLoader.discover(rootPath, "", [])};
+        this.templateDir = null;
+        this.markdownStructure = {name: dirName, files: this.discover(rootPath, "", [])};
     }
 
-    static discover(dir, rel, mdStruct) {
+    discover(dir, rel, mdStruct) {
         var mdStruct = mdStruct || [];
         var files = fs.readdirSync(dir);
+        var dirLoader = this;
 
         files.forEach(function(file) {
             if (fs.statSync(path.join(dir, file)).isDirectory()) {
-                mdStruct.push({
-                     name: file, 
-                     path: null, 
-                     content: null, 
-                     files: DirectoryLoader.discover(path.join(dir, file), rel+"/"+file, [])});
-                if(mdStruct[mdStruct.length - 1].files.length === 0) {
-                    mdStruct.splice(mdStruct.length - 1, 1);
+                if(file === ".markdown-webserver") {
+                    console.log("INFO - user-defined templates found!");
+                    dirLoader.templateDir = {
+                        files: dirLoader.discover(path.join(dir, file), rel+"/"+file, [])};
+                } else {          
+                    mdStruct.push({
+                        name: file, 
+                        path: null, 
+                        content: null, 
+                        files: dirLoader.discover(path.join(dir, file), rel+"/"+file, [])});
+                    if(mdStruct[mdStruct.length - 1].files.length === 0) {
+                        mdStruct.splice(mdStruct.length - 1, 1);
+                    }
                 }
             }
             else {
-                mdStruct.push({
-                    name: file, 
-                    path: rel+"/"+file,
-                    content: fs.readFileSync(path.join(dir, file), 'utf8'),
-                    files:null});
+                if(file.match(/\.(md|txt|markdown)$/i)) {
+                    mdStruct.push({
+                        name: file, 
+                        path: rel+"/"+file,
+                        content: fs.readFileSync(path.join(dir, file), 'utf8'),
+                        files:null});
+                    }
             }
         });
 
@@ -71,6 +81,10 @@ module.exports = class DirectoryLoader {
                 DirectoryLoader.doRecursive(file, method);
             }
         });
+    }
+
+    getUserTemplate(key) {
+        return this.get(this.templateDir, key);
     }
 
     get(struct, key) {
