@@ -12,6 +12,8 @@ module.exports = class DirectoryLoader {
     }
 
     parseDir(rootPath) {
+        this.handleGitRepo(rootPath);
+
         var dirName = this.parseName(rootPath);
         this.templateDir = null;
         this.markdownStructure = {
@@ -20,6 +22,18 @@ module.exports = class DirectoryLoader {
         };
 
         this.scheduleNextParse(this, rootPath);
+    }
+
+    handleGitRepo(root) {
+        if(this.isGitRepo) {
+            try {
+                require('simple-git')(root).pull(function() {
+                    console.log("INFO - Successfully pulled git repo.");
+                });
+            } catch (e) {
+                console.log("WARNING - error during git repo pull: " + e);
+            }
+        }
     }
 
     scheduleNextParse(dirLoader, rootPath) {
@@ -41,6 +55,8 @@ module.exports = class DirectoryLoader {
                     dirLoader.templateDir = {
                         files: dirLoader.discover(path.join(dir, file), rel + "/" + file, [])
                     };
+                } else if(file === ".git") {
+                    dirLoader.isGitRepo = true;
                 } else {
                     mdStruct.push({
                         name: file,

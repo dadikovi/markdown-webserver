@@ -1,20 +1,19 @@
 # markdown-webserver
 This is a simple NodeJS application which can turn a directory structure with markdown files into a webserver.
-**Beta version, still under development.**
 
 ## Installation
 
 *Requirements:* NodeJS.
 
-1. Checkout this repository.
+1. Clone this repository.
 2. Run `npm install` command in the cloned directory.
 3. You can start the server by `node index.js -p <path-to-root-directory>` command.
 
 The server will discover the given directory recursively, and will serve the found markdown files similiar to a wiki website.
 
-## Configuration
+## Customization
 
-There is not much configuration possibility yet...
+There is not much customize possibility yet...
 
 - You can create a `.markdown-webserver` directory in the root directory. The server will recognize the following files in this directory:
     - `COPYRIGHT.md` - rendered at the bottom of the left menu
@@ -24,6 +23,10 @@ There is not much configuration possibility yet...
 
 - The layout of the application is declared in `.mustache` files in _templates_ directory.
 - The `less` files are in _resources_ directory.
+
+## Working with GIT repositories
+
+If your root directory is a GIT repository (has `.git` subdirectory), the server will orderly pull the contents of remote repository.
 
 ## Other information
 
