@@ -28,5 +28,6 @@ There is not much configuration possibility yet...
 ## Other information
 
 - The server use cache for the files, the cache timeout is 5 minutes.
+- Static files (like images) can be served only if they are in `<path-to-root-directory>/.resources` directory.
 
 Feel free to use this code for any purpose, pull requests are also welcomed.

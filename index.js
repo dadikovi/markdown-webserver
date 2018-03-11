@@ -1,5 +1,6 @@
 var express = require('express');
 var fs = require('fs');
+const path = require('path');
 var JSON = require('JSON');
 var marked = require('marked');
 
@@ -10,6 +11,12 @@ var ErrorHandler = require('./ErrorHandler');
 
 var dirLoader;
 var templEngine;
+
+dirLoader = new DirectoryLoader();
+templEngine = new TemplateEngine();
+
+templEngine.init();
+readDirectory();
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -29,12 +36,6 @@ app.get('/*', function (req, res) {
 })
 
 app.listen(80, function () {
-    dirLoader = new DirectoryLoader();
-    templEngine = new TemplateEngine();
-
-    templEngine.init();
-    readDirectory()
-
     console.log('INFO - markdown-webserver is listening on port 80!');
 });
 
@@ -92,6 +93,10 @@ function readDirectory() {
         /* Just to check if this is a valid directory */
         fs.readdirSync(rootPath);
         dirLoader.parseDir(rootPath);
+
+        resourceDir = path.join(rootPath, ".resources")
+        console.log("INFO - resource directory: " + resourceDir);
+        app.use(express.static("testdir/.resources"));
     } catch (err) {
         console.log("ERROR - The root markdown directory path you defined is invalid! " + err);
         process.exit();

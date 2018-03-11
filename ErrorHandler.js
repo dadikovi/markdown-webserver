@@ -3,7 +3,7 @@ module.exports = class ErrorHandler {
         var userDefinedContent = "# This content was not found.\n\nFor further information, contact the administrator.";
 
         try {
-            userDefinedContent.dirLoader.getUserTemplate("NOTFOUND.md");
+            userDefinedContent = dirLoader.getUserTemplate("NOTFOUND.md");
             return userDefinedContent.content;
         } catch (e) {}
 
@@ -13,7 +13,7 @@ module.exports = class ErrorHandler {
         var userDefinedContent = "# This content is empty.\n\nFor further information, contact the administrator.";
 
         try {
-            userDefinedContent.dirLoader.getUserTemplate("EMPTY.md");
+            userDefinedContent = dirLoader.getUserTemplate("EMPTY.md");
             return userDefinedContent.content;
         } catch (e) {}
 
@@ -23,7 +23,7 @@ module.exports = class ErrorHandler {
         var userDefinedContent = "# Welcome!";
 
         try {
-            userDefinedContent.dirLoader.getUserTemplate("HOME.md");
+            userDefinedContent = dirLoader.getUserTemplate("HOME.md");
             return userDefinedContent.content;
         } catch (e) {}
 

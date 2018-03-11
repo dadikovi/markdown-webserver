@@ -12,6 +12,7 @@
     "express": "^4.16.2",
     "json": "^9.0.6",
     "marked": "^0.3.17",
-    "mustache": "^2.3.0"
+    "mustache": "^2.3.0",
+    "simple-git": "^1.92.0"
   }
 }
