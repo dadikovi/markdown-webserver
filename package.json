@@ -4,15 +4,32 @@
   "description": "This is a simple application which can turn a markdown directory structure to a webserver",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter spec"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "dadikovi <dadikovi@gmail.com> (dadikovi.github.io)",
+  "license": "Apache-2.0",
   "dependencies": {
     "express": "^4.16.2",
     "json": "^9.0.6",
     "marked": "^0.3.17",
     "mustache": "^2.3.0",
     "simple-git": "^1.92.0"
-  }
+  },
+  "engines": {
+    "node": ">=4.2.4"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadikovi/markdown-webserver.git"
+  },
+  "keywords": [
+    "markdown",
+    "webserver",
+    "git"
+  ],
+  "bugs": {
+    "url": "https://github.com/dadikovi/markdown-webserver/issues"
+  },
+  "homepage": "https://github.com/dadikovi/markdown-webserver#readme"
 }
