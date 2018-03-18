@@ -11,6 +11,10 @@ class TemplateEngine {
             {
                 name: "main",
                 content: null
+            },
+            {
+                name: "search",
+                content: null
             }
         ];
     }
@@ -40,6 +44,9 @@ class TemplateEngine {
     }
     renderMain(data) {
         return Mustache.to_html(this.getTemplateContent("main"), data);
+    }
+    renderSearchContent(data) {
+        return Mustache.to_html(this.getTemplateContent("search"), data);
     }
 };
 

@@ -10,7 +10,7 @@ class ResponseBuilder {
         this.marked = marked;
 
         this.templEngine.init();
-        this.contentGenFactory.init();
+        this.contentGenFactory.init(this.templEngine);
 
         return this;
     }
@@ -35,7 +35,7 @@ class ResponseBuilder {
      */
     addContent(path) {
         var generator = this.contentGenFactory.getContentGenerator(path, this.dirLoader);
-        this.response.content = generator.generateContent();
+        this.response.content = marked(generator.generateContent());
         return this;
     }
 

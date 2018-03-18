@@ -87,6 +87,17 @@ class DirectoryLoader {
         return this.markdownStructure;
     }
 
+    getLeafArray() {
+        var array = [];
+        DirectoryLoader.doRecursive(this.markdownStructure, function(file) {
+            if(file.files === null) {
+                array.push(file);
+            }
+        });
+
+        return array;
+    }
+
     getContent(path) {
         var levels = path.split("/");
         var content_i = this.markdownStructure;

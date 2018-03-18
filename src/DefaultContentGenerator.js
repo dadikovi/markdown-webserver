@@ -1,5 +1,3 @@
-var marked = require('marked');
-
 class DefaultContentGenerator {
     init(dirLoader) {
         this.dirLoader = dirLoader;
@@ -8,7 +6,7 @@ class DefaultContentGenerator {
     }
 
     generateContent() {
-        return marked(this.ErrorHandler.getDefaultContent(this.dirLoader));
+        return this.ErrorHandler.getDefaultContent(this.dirLoader);
     }
 }
 
