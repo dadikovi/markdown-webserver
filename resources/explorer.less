@@ -1,3 +1,5 @@
+@import "colors.less";
+
 ul.explorer {
     list-style-type: none;
 }
@@ -11,11 +13,11 @@ ul.explorer > li.expandable > p {
 }
 
 ul.explorer p, ul.explorer a {
-    color: #333;
+    color: @foreground;
 }
 
 ul.explorer a:hover {
-    color: #444;
+    color: @foreground-lighter;
 }
 
 ul.explorer li.expandable > p {
@@ -33,9 +35,9 @@ ul.explorer li.explorer-collapsed > p {
 }
 
 ul.explorer p.selected {
-    background-color: #888;
+    background-color: @selection-color;
     padding: 2px 5px;
-    color: #fff;
+    color: @lighter-background;
 }
 
 p.selected::after {
