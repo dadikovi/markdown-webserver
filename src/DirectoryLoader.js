@@ -5,7 +5,7 @@ var NotFoundException = {
     reason: "NOT_FOUND"
 };
 
-module.exports = class DirectoryLoader {
+class DirectoryLoader {
 
     static get REFRESH_TIMEOUT() {
         return 5 * 60 * 1000;
@@ -159,3 +159,5 @@ module.exports = class DirectoryLoader {
         }
     }
 };
+
+module.exports = new DirectoryLoader();

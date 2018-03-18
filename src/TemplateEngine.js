@@ -2,7 +2,7 @@ var fs = require('fs');
 const path = require('path');
 var Mustache = require('mustache');
 
-module.exports = class TemplateEngine {
+class TemplateEngine {
     constructor() {
         this.templates = [{
                 name: "explorer",
@@ -42,3 +42,5 @@ module.exports = class TemplateEngine {
         return Mustache.to_html(this.getTemplateContent("main"), data);
     }
 };
+
+module.exports = new TemplateEngine();
