@@ -6,9 +6,11 @@ class ResponseBuilder {
         this.dirLoader = dirLoader;
         this.templEngine = require('./TemplateEngine');
         this.ErrorHandler = require('./ErrorHandler');
+        this.contentGenFactory = require('./ContentGeneratorFactory');
         this.marked = marked;
 
         this.templEngine.init();
+        this.contentGenFactory.init();
 
         return this;
     }
@@ -32,27 +34,8 @@ class ResponseBuilder {
      * @param {*} path - the path-part of URL.
      */
     addContent(path) {
-        if (path === "/" || path === "") {
-            this.response.content = this.marked(this.ErrorHandler.getDefaultContent(this.dirLoader));
-            return this;
-        } else if (path.startsWith("/")) {
-            path = path.substr(1);
-        }
-
-        try {
-            var content_raw = this.dirLoader.getContent(path);
-        } catch (e) {
-            if (e.reason !== undefined && e.reason === "NOT_FOUND") {
-                this.response.content = this.marked(this.ErrorHandler.getNotFoundContent(this.dirLoader));
-                return this;
-            }
-        }
-
-        if (content_raw === undefined || content_raw === null) {
-            this.response.content = this.marked(this.ErrorHandler.getEmptyContent(this.dirLoader));
-            return this;
-        }
-        this.response.content = this.marked(content_raw);
+        var generator = this.contentGenFactory.getContentGenerator(path, this.dirLoader);
+        this.response.content = generator.generateContent();
         return this;
     }
 
