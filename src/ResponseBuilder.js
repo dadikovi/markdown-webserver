@@ -46,9 +46,12 @@ class ResponseBuilder {
     addCopyRight() {
         var copy = "";
         try {
-            copy_raw = this.dirLoader.getUserTemplate("COPYRIGHT.md");
+            var copy_raw = this.dirLoader.getUserTemplate("COPYRIGHT.md");
             copy = this.marked(copy_raw.content);
-        } catch (e) {}
+        } catch (e) {
+            console.log("WARNING - copyright information was not found or could not be parsed!");
+            console.log(e);
+        }
 
         this.response.copyright = copy;
         return this;
