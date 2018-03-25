@@ -48,9 +48,17 @@ class ResponseBuilder {
         try {
             copy_raw = this.dirLoader.getUserTemplate("COPYRIGHT.md");
             copy = this.marked(copy_raw.content);
-        } catch (e) { }
+        } catch (e) {}
 
         this.response.copyright = copy;
+        return this;
+    }
+
+    /** 
+     * Adds the HTML source of search form into the response object. 
+     */
+    addSearchForm() {
+        this.response.searchform = this.templEngine.renderSearchForm();
         return this;
     }
 

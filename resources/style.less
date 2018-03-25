@@ -1,10 +1,18 @@
 @import "colors.less";
 
+/**
+ * CONTENT --
+ * 1. Layout
+ * 2. Texts, typography
+ * 3. Search
+ */
+
+/* Layout */
+
 html, body {
     width: 100%; min-height: 100%;
     background-color: @darker-background;
 }
-
 .row {
     margin: 0px;
 }
@@ -25,7 +33,7 @@ img.profile-image{
 }
 div.pageinfo main, div.pageinfo footer {
     margin-top: 5%;
-    padding-top: 5%;
+    padding-top: 2%;
     border-top: 1px solid @light-white-3;
 }
 
@@ -36,7 +44,9 @@ div.content main {
     margin: 10%;
 }
 
-div.pageinfo h1, div.pageinfo h2, div.pageinfo i {
+/* Texts, typography */
+
+div.pageinfo h1, div.pageinfo h2 {
     color: @foreground;
     text-align: center;
 }
@@ -59,3 +69,33 @@ div.pageinfo h2 {
 span.match {
     background-color: @match-color;
 }
+
+/* Search */
+
+.search-container {
+    width: auto;
+    margin: 0px 40px 40px 40px;
+}
+.search-container button {
+    padding: 6px 10px;
+    margin-top: 8px;
+    margin-right: 16px;
+    background: @foreground;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+    color: @darker-background;
+    width: 2.2em;
+  }
+  
+  .search-container button:hover {
+    background: @foreground-lighter;
+  }
+
+  .search-container input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: none;
+    width: 12em;
+  }

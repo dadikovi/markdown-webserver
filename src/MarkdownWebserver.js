@@ -41,6 +41,7 @@ class MarkdownWebserver {
                 .addContent(req.path)
                 .addCopyRight()
                 .addExplorer()
+                .addSearchForm()
                 .toHtml()
     }
     

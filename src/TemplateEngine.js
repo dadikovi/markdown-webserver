@@ -13,7 +13,11 @@ class TemplateEngine {
                 content: null
             },
             {
-                name: "search",
+                name: "searchresult",
+                content: null
+            },
+            {
+                name: "searchform",
                 content: null
             }
         ];
@@ -46,7 +50,10 @@ class TemplateEngine {
         return Mustache.to_html(this.getTemplateContent("main"), data);
     }
     renderSearchContent(data) {
-        return Mustache.to_html(this.getTemplateContent("search"), data);
+        return Mustache.to_html(this.getTemplateContent("searchresult"), data);
+    }
+    renderSearchForm() {
+        return  Mustache.to_html(this.getTemplateContent("searchform"), {});
     }
 };
 
