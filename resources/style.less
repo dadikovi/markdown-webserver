@@ -5,6 +5,7 @@
  * 1. Layout
  * 2. Texts, typography
  * 3. Search
+ * 4. Responsive behavior
  */
 
 /* Layout */
@@ -42,6 +43,11 @@ div.pageinfo footer {
 }
 div.content main {
     margin: 10%;
+}
+div.content footer {
+    padding: 2% 0%;
+    background-color: @darker-background;
+    display: none;
 }
 
 /* Texts, typography */
@@ -99,3 +105,17 @@ span.match {
     border: none;
     width: 12em;
   }
+
+  /* Responsive behavior */
+
+  @media only screen and (max-width: 992px) {
+    div.fullheight {
+        min-height: 0px;
+    }
+    div.pageinfo footer {
+        display: none;
+    }
+    div.content footer {
+        display: block;
+    }
+}
