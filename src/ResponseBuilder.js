@@ -1,4 +1,5 @@
 var marked = require('marked');
+var widgetArea = require('./WidgetArea');
 
 class ResponseBuilder {
     init(dirLoader) {
@@ -60,8 +61,14 @@ class ResponseBuilder {
     /** 
      * Adds the HTML source of search form into the response object. 
      */
-    addSearchForm() {
-        this.response.searchform = this.templEngine.renderSearchForm();
+    addWidgets() {
+        this.response.widgets_lmt = "";
+        for(var i = 0; i<this.widgets.length; i++) {
+            var widget = this.widgets[i];
+            if(widget.widgetArea === widgetArea.LEFT_MAIN_TOP) {
+                this.response.widgets_lmt += " " + widget.htmlString;
+            }
+        }
         return this;
     }
 
@@ -78,6 +85,10 @@ class ResponseBuilder {
      */
     toHtml() {
         return this.templEngine.renderMain(this.response);
+    }
+
+    registerWidgets(widgets) {
+        this.widgets = widgets;
     }
 };
 

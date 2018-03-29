@@ -2,6 +2,8 @@ var fs = require('fs');
 var path = require('path');
 var responseBuilder = require('./ResponseBuilder');
 var dirLoader = require('./DirectoryLoader');
+var pluginLoader = require('./PluginLoader');
+var pluginContext = require('./MarkdownWebserverPluginContext'),
 
 class MarkdownWebserver {
     /** 
@@ -12,10 +14,28 @@ class MarkdownWebserver {
         this.app = app;
         this.express = express;
 
-        var rootPath = this.parseRootPath();        
+        var rootPath = this.parseRootPath();
         this.checkIfPathExists(rootPath);
         dirLoader.parseDir(rootPath);
-        this.handleResourceDirectory(rootPath);       
+        this.handleResourceDirectory(rootPath);
+        this.plugins = this.pluginLoader.getPlugins();
+        this.initPlugins();
+    }
+
+    initPlugins() {
+        var context = pluginContext
+                        .Builder()
+                        .addmarkdownWebserver(this)
+                        .addDirLoader(dirLoader)
+                        .build();
+        for(var i = 0; i<this.plugins.length; i++) {
+            this.plugins[i].init(context);
+        }
+        this.processContext(context);
+    }
+
+    processContext(context) {
+        responseBuilder.registerWidgets(context.widgets);
     }
 
     handleResourceDirectory(rootPath) {
