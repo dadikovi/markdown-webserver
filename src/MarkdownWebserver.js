@@ -29,13 +29,19 @@ class MarkdownWebserver {
                         .addDirLoader(dirLoader)
                         .build();
         for(var i = 0; i<this.plugins.length; i++) {
-            this.plugins[i].init(context);
+            this.plugins[i].object.init(context);
         }
         this.processContext(context);
     }
 
     processContext(context) {
         responseBuilder.registerWidgets(context.widgets);
+        responseBuilder.registerScripts(context.scripts);
+        responseBuilder.registerStyles(context.styles);
+
+        for(var i=0; i<context.resourceDirs.length; i++) {
+            this.app.use(this.express.static(context.resourceDirs[i]));
+        }
     }
 
     handleResourceDirectory(rootPath) {
@@ -62,6 +68,8 @@ class MarkdownWebserver {
                 .addCopyRight()
                 .addExplorer()
                 .addWidgets()
+                .addStyles()
+                .addScripts()
                 .toHtml()
     }
     

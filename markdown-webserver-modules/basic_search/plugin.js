@@ -1,8 +1,16 @@
+var path = require('path');
+
 class BasicSearch {
     init(markdownWebserverPluginContext) {
         markdownWebserverPluginContext.registerWidget({
             htmlString : this.getSearchFormHTML(), 
             widgetArea : markdownWebserverPluginContext.widgetArea.LEFT_MAIN_TOP
+        });
+        markdownWebserverPluginContext.registerUiScript({
+            path: path.join(__dirname, 'resources/search.ui.js')
+        });
+        markdownWebserverPluginContext.registerStyle({
+            path: path.join(__dirname, 'resources/search.css')
         });
     }
     

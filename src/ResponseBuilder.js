@@ -59,18 +59,26 @@ class ResponseBuilder {
     }
 
     /** 
-     * Adds the HTML source of search form into the response object. 
+     * Renders widgets.
      */
     addWidgets() {
         this.response.widgets_lmt = "";
         for(var i = 0; i<this.widgets.length; i++) {
             var widget = this.widgets[i];
-            console.log("There is widget! " + widget.widgetArea + " VS " + widgetArea.LEFT_MAIN_TOP);
             if(widget.widgetArea == widgetArea.LEFT_MAIN_TOP) {
                 this.response.widgets_lmt += " " + widget.htmlString;
-                console.log("Widget added!");
             }
         }
+        return this;
+    }
+
+    addStyles() {
+        this.response.styles = this.styles;
+        return this;
+    }
+
+    addScripts() {
+        this.response.scripts = this.scripts;
         return this;
     }
 
@@ -91,6 +99,14 @@ class ResponseBuilder {
 
     registerWidgets(widgets) {
         this.widgets = widgets;
+    }
+
+    registerScripts(scripts) {
+        this.scripts = scripts;
+    }
+
+    registerStyles(styles) {
+        this.styles = styles;
     }
 };
 

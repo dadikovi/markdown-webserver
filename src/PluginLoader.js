@@ -14,8 +14,13 @@ class PluginLoader {
                 PluginLoader.loadModules(f);
             }
         } else {
-            console.log("INFO - Found plugin on path: " + path);
-            modules.push(require(path));
+            if(path_module.basename(path).endsWith(".js") && !path_module.basename(path).endsWith(".ui.js")) {
+                console.log("INFO - Found plugin on path: " + path);
+                modules.push({
+                    path: path,
+                    object: require(path)
+                });
+            }
         }
     }
     getPlugins() {
