@@ -8,7 +8,7 @@ module.exports = class MarkdownWebserverPluginContext {
     }
     static get Builder() {
         class Builder {
-            addmarkdownWebserver(markdownWebserver) {
+            addMarkdownWebserver(markdownWebserver) {
                 this.markdownWebserver = markdownWebserver;
                 return this;
             }
@@ -20,6 +20,8 @@ module.exports = class MarkdownWebserverPluginContext {
                 return new MarkdownWebserverPluginContext(this);
             }
         }
+
+        return new Builder();
     }    
 
     /**
@@ -28,6 +30,6 @@ module.exports = class MarkdownWebserverPluginContext {
      * @param {*} widget - required format: { htmlString, widgetArea }
      */
     registerWidget(widget) {
-        this.widgets.append(widget);
+        this.widgets.push(widget);
     }
 }

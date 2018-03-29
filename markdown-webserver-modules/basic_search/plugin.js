@@ -1,6 +1,9 @@
 class BasicSearch {
     init(markdownWebserverPluginContext) {
-        markdownWebserverPluginContext.registerWidget(this.getSearchFormHTML(), markdownWebserverPluginContext.widgetArea.LEFT_MAIN_TOP);
+        markdownWebserverPluginContext.registerWidget({
+            htmlString : this.getSearchFormHTML(), 
+            widgetArea : markdownWebserverPluginContext.widgetArea.LEFT_MAIN_TOP
+        });
     }
     
     getSearchFormHTML() {

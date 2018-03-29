@@ -65,8 +65,10 @@ class ResponseBuilder {
         this.response.widgets_lmt = "";
         for(var i = 0; i<this.widgets.length; i++) {
             var widget = this.widgets[i];
-            if(widget.widgetArea === widgetArea.LEFT_MAIN_TOP) {
+            console.log("There is widget! " + widget.widgetArea + " VS " + widgetArea.LEFT_MAIN_TOP);
+            if(widget.widgetArea == widgetArea.LEFT_MAIN_TOP) {
                 this.response.widgets_lmt += " " + widget.htmlString;
+                console.log("Widget added!");
             }
         }
         return this;
