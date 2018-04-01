@@ -54,7 +54,6 @@ module.exports = class MarkdownWebserverPluginContext {
 
     /**
      * Registers a new script, which will be rendered in head - part of result html.
-     * Script's name should be end with ".ui.js", so it wont be parsed as module.
      * @param {path} script 
      */
     registerUiScript(script) {
@@ -80,7 +79,7 @@ module.exports = class MarkdownWebserverPluginContext {
 
     /**
      * Registers a new content generator which will be executed during routing in application.
-     * The given generator must be a function with a "path" attribute.
+     * The given generator must be an object with a function named "contentGeneratorMethod" with a "path" attribute.
      * @param {*} generator 
      */
     registerContentGenerator(generator) {
