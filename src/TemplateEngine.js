@@ -15,10 +15,6 @@ class TemplateEngine {
             {
                 name: "searchresult",
                 content: null
-            },
-            {
-                name: "searchform",
-                content: null
             }
         ];
     }
@@ -51,9 +47,6 @@ class TemplateEngine {
     }
     renderSearchContent(data) {
         return Mustache.to_html(this.getTemplateContent("searchresult"), data);
-    }
-    renderSearchForm() {
-        return  Mustache.to_html(this.getTemplateContent("searchform"), {});
     }
 };
 

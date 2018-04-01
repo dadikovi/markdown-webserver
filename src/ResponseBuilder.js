@@ -1,4 +1,5 @@
 var marked = require('marked');
+var widgetArea = require('./WidgetArea');
 
 class ResponseBuilder {
     init(dirLoader) {
@@ -11,8 +12,8 @@ class ResponseBuilder {
 
         this.templEngine.init();
         this.contentGenFactory.init(this.templEngine);
-
-        return this;
+        
+        console.log("ResponseBuilder inited." + this.templEngine);
     }
     /** 
      * This should be called when a http request arrives. 
@@ -58,10 +59,26 @@ class ResponseBuilder {
     }
 
     /** 
-     * Adds the HTML source of search form into the response object. 
+     * Renders widgets.
      */
-    addSearchForm() {
-        this.response.searchform = this.templEngine.renderSearchForm();
+    addWidgets() {
+        this.response.widgets_lmt = "";
+        for(var i = 0; i<this.widgets.length; i++) {
+            var widget = this.widgets[i];
+            if(widget.widgetArea == widgetArea.LEFT_MAIN_TOP) {
+                this.response.widgets_lmt += " " + widget.htmlString;
+            }
+        }
+        return this;
+    }
+
+    addStyles() {
+        this.response.styles = this.styles;
+        return this;
+    }
+
+    addScripts() {
+        this.response.scripts = this.scripts;
         return this;
     }
 
@@ -78,6 +95,25 @@ class ResponseBuilder {
      */
     toHtml() {
         return this.templEngine.renderMain(this.response);
+    }
+
+    /**
+     * Plugin methods are registered here.
+     */
+
+    registerWidgets(widgets) {
+        this.widgets = widgets;
+    }
+
+    registerScripts(scripts) {
+        this.scripts = scripts;
+    }
+
+    registerStyles(styles) {
+        this.styles = styles;
+    }
+    registerContentGenerators(contentGenerators) {
+        this.contentGenFactory.registerPlugins(contentGenerators);
     }
 };
 

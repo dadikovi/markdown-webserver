@@ -1,10 +1,10 @@
 class SearchContentGenerator {
     init(dirLoader, searchEngine, templEngine, path) {
         this.dirLoader = dirLoader;
-        this.ErrorHandler = require('./ErrorHandler');
         this.searchEngine = searchEngine;
         this.templEngine = templEngine;
         this.path = path;
+        console.log("SearchContentGenerator - " + this.dirLoader);
         return this;
     }
 

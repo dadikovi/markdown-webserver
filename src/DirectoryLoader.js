@@ -11,6 +11,10 @@ class DirectoryLoader {
         return 5 * 60 * 1000;
     }
 
+    init(server) {
+        this.server = server;
+    }
+
     parseDir(rootPath) {
         this.handleGitRepo(rootPath);
 
@@ -20,6 +24,8 @@ class DirectoryLoader {
             name: dirName,
             files: this.discover(rootPath, "", [])
         };
+
+        this.server.directoryReloaded();
 
         this.scheduleNextParse(this, rootPath);
     }
