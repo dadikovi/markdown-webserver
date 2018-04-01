@@ -13,31 +13,57 @@ class MarkdownWebserver {
     init(app, express) {
         this.app = app;
         this.express = express;
+        this.plugins = pluginLoader.getPlugins();
 
         var rootPath = this.parseRootPath();
         this.checkIfPathExists(rootPath);
+        dirLoader.init(this);
         dirLoader.parseDir(rootPath);
-        this.handleResourceDirectory(rootPath);
-        this.plugins = pluginLoader.getPlugins();
+        responseBuilder.init(dirLoader);
         this.initPlugins();
+        this.handleResourceDirectory(rootPath);
     }
 
     initPlugins() {
-        var context = pluginContext
-                        .Builder
-                        .addMarkdownWebserver(this)
-                        .addDirLoader(dirLoader)
-                        .build();
+        var context = this.createPluginContext();
         for(var i = 0; i<this.plugins.length; i++) {
             this.plugins[i].object.init(context);
         }
         this.processContext(context);
+        this.pluginsInited = true;
+    }
+
+    /** 
+     * This is a hook which is called when directoryLoader reloads the directory structure.
+     */
+    directoryReloaded() {
+        this.reloadPlugins();
+        responseBuilder.init(dirLoader);
+    }
+
+    reloadPlugins() {
+        if(this.pluginsInited) {
+            var context = this.createPluginContext();
+            for(var i = 0; i<this.plugins.length; i++) {
+                this.plugins[i].object.reload(context);
+            }
+        }
+    }
+
+    createPluginContext() {
+        return pluginContext
+                        .Builder
+                        .addMarkdownWebserver(this)
+                        .addDirLoader(dirLoader)
+                        .addTemplEngine(responseBuilder.templEngine)
+                        .build();
     }
 
     processContext(context) {
         responseBuilder.registerWidgets(context.widgets);
         responseBuilder.registerScripts(context.scripts);
         responseBuilder.registerStyles(context.styles);
+        responseBuilder.registerContentGenerators(context.contentGenerators);
 
         for(var i=0; i<context.resourceDirs.length; i++) {
             this.app.use(this.express.static(context.resourceDirs[i]));
@@ -61,7 +87,6 @@ class MarkdownWebserver {
 
     processRequest(req) {
         return responseBuilder
-                .init(dirLoader)
                 .reset()
                 .addName()
                 .addContent(req.path)

@@ -5,19 +5,34 @@ module.exports = class MarkdownWebserverPluginContext {
         this.widgetArea = require('./WidgetArea');
         this.dirLoader = builder.dirLoader;
         this.markdownWebserver = builder.markdownWebserver;
+        this.templEngine = builder.templEngine;
         this.widgets = [];
         this.scripts = [];
         this.styles = [];
         this.resourceDirs = [];
+        this.contentGenerators = [];
     }
     static get Builder() {
         class Builder {
             addMarkdownWebserver(markdownWebserver) {
+                if(markdownWebserver == null) {
+                    console.log("WARNING - added null server.");
+                }
                 this.markdownWebserver = markdownWebserver;
                 return this;
             }
             addDirLoader(dirLoader) {
+                if(dirLoader == null) {
+                    console.log("WARNING - added null directory loader.");
+                }
                 this.dirLoader = dirLoader;
+                return this;
+            }
+            addTemplEngine(templEngine) {
+                if(templEngine == null) {
+                    console.log("WARNING - added null template engine.");
+                }
+                this.templEngine = templEngine;
                 return this;
             }
             build() {
@@ -61,5 +76,14 @@ module.exports = class MarkdownWebserverPluginContext {
         }
         style.path = path.basename(style.path);
         this.styles.push(style);
+    }
+
+    /**
+     * Registers a new content generator which will be executed during routing in application.
+     * The given generator must be a function with a "path" attribute.
+     * @param {*} generator 
+     */
+    registerContentGenerator(generator) {
+        this.contentGenerators.push(generator);
     }
 }

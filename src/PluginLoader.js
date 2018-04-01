@@ -14,7 +14,7 @@ class PluginLoader {
                 PluginLoader.loadModules(f);
             }
         } else {
-            if(path_module.basename(path).endsWith(".js") && !path_module.basename(path).endsWith(".ui.js")) {
+            if(path_module.basename(path) === "plugin.js") {
                 console.log("INFO - Found plugin on path: " + path);
                 modules.push({
                     path: path,

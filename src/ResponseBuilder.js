@@ -12,8 +12,8 @@ class ResponseBuilder {
 
         this.templEngine.init();
         this.contentGenFactory.init(this.templEngine);
-
-        return this;
+        
+        console.log("ResponseBuilder inited." + this.templEngine);
     }
     /** 
      * This should be called when a http request arrives. 
@@ -97,6 +97,10 @@ class ResponseBuilder {
         return this.templEngine.renderMain(this.response);
     }
 
+    /**
+     * Plugin methods are registered here.
+     */
+
     registerWidgets(widgets) {
         this.widgets = widgets;
     }
@@ -107,6 +111,9 @@ class ResponseBuilder {
 
     registerStyles(styles) {
         this.styles = styles;
+    }
+    registerContentGenerators(contentGenerators) {
+        this.contentGenFactory.registerPlugins(contentGenerators);
     }
 };
 
