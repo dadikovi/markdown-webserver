@@ -11,10 +11,6 @@ class TemplateEngine {
             {
                 name: "main",
                 content: null
-            },
-            {
-                name: "searchresult",
-                content: null
             }
         ];
     }
@@ -22,6 +18,14 @@ class TemplateEngine {
         this.templates.forEach(function (template) {
             template.content = fs.readFileSync("templates/" + template.name + ".mustache", "utf8");
         });
+    }
+    addPluginTemplates(pluginTemplates) {
+        for(var i = 0; i<pluginTemplates.length; i++) {
+            this.templates.push({
+                name: pluginTemplates[i].key,
+                content: fs.readFileSync(pluginTemplates[i].file, "utf8")
+            });
+        }
     }
     getTemplateContent(name) {
         var ret = "";
@@ -42,11 +46,11 @@ class TemplateEngine {
             explorer: this.getTemplateContent("explorer")
         });
     }
-    renderMain(data) {
-        return Mustache.to_html(this.getTemplateContent("main"), data);
+    abstractRender(name, data) {
+        return Mustache.to_html(this.getTemplateContent(name), data);
     }
-    renderSearchContent(data) {
-        return Mustache.to_html(this.getTemplateContent("searchresult"), data);
+    renderMain(data) {
+        return this.abstractRender("main", data);
     }
 };
 

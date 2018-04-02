@@ -64,6 +64,7 @@ class MarkdownWebserver {
         responseBuilder.registerScripts(context.scripts);
         responseBuilder.registerStyles(context.styles);
         responseBuilder.registerContentGenerators(context.contentGenerators);
+        responseBuilder.templEngine.addPluginTemplates(context.templateFiles);
 
         for(var i=0; i<context.resourceDirs.length; i++) {
             this.app.use(this.express.static(context.resourceDirs[i]));

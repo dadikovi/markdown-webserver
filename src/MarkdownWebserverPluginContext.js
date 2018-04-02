@@ -11,6 +11,7 @@ module.exports = class MarkdownWebserverPluginContext {
         this.styles = [];
         this.resourceDirs = [];
         this.contentGenerators = [];
+        this.templateFiles = [];
     }
     static get Builder() {
         class Builder {
@@ -84,5 +85,18 @@ module.exports = class MarkdownWebserverPluginContext {
      */
     registerContentGenerator(generator) {
         this.contentGenerators.push(generator);
+    }
+
+    /**
+     * Registers a new template file, which will be loaded by template engine.
+     * The file will be available with the given key.
+     * @param {*} file 
+     * @param {*} key
+     */
+    registerTemplate(file, key) {
+        this.templateFiles.push({
+            file: file,
+            key: key
+        });
     }
 }

@@ -2,6 +2,8 @@ var path = require('path');
 var searchContentGenerator = require('./src/SearchContentGenerator');
 var searchEngine = require('./src/SearchEngine');
 var SEARCH_PATH = "/search/";
+var SEARCH_RESULT_TEMPLATE = "searchresult.mustache";
+var SEATCH_RESULT_TEMPLATE_KEY = "basic_search_searchresult";
 
 class BasicSearch {
     init(markdownWebserverPluginContext) {
@@ -19,11 +21,12 @@ class BasicSearch {
             path: path.join(__dirname, 'resources/search.css')
         });
         markdownWebserverPluginContext.registerContentGenerator(this);
+        markdownWebserverPluginContext.registerTemplate(path.join(__dirname, 'templates', SEARCH_RESULT_TEMPLATE), SEATCH_RESULT_TEMPLATE_KEY);
     }
 
     contentGeneratorMethod(path) {
         if (path.startsWith(SEARCH_PATH)) {
-            return searchContentGenerator.init(this.dirLoader, searchEngine, this.templEngine, path.substr(SEARCH_PATH.length));
+            return searchContentGenerator.init(this.dirLoader, searchEngine, this.templEngine, path.substr(SEARCH_PATH.length), SEATCH_RESULT_TEMPLATE_KEY);
         } else {
             return null;
         }

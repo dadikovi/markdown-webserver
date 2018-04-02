@@ -1,17 +1,17 @@
 class SearchContentGenerator {
-    init(dirLoader, searchEngine, templEngine, path) {
+    init(dirLoader, searchEngine, templEngine, path, templateKey) {
         this.dirLoader = dirLoader;
         this.searchEngine = searchEngine;
         this.templEngine = templEngine;
         this.path = path;
-        console.log("SearchContentGenerator - " + this.dirLoader);
+        this.templateKey = templateKey;
         return this;
     }
 
     generateContent() {
         var query = decodeURIComponent(this.path);
         var results = this.searchEngine.doSearch(this.dirLoader.getLeafArray(), query);
-        return this.templEngine.renderSearchContent({query: query, results: results});
+        return this.templEngine.abstractRender(this.templateKey, {query: query, results: results});
     }
 }
 
