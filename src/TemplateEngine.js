@@ -15,9 +15,12 @@ class TemplateEngine {
         ];
     }
     init() {
-        this.templates.forEach(function (template) {
-            template.content = fs.readFileSync("templates/" + template.name + ".mustache", "utf8");
-        });
+        if(!this.inited) {
+            this.templates.forEach(function (template) {
+                template.content = fs.readFileSync("templates/" + template.name + ".mustache", "utf8");
+            });
+            this.inited = true;
+        }
     }
     addPluginTemplates(pluginTemplates) {
         for (var i = 0; i < pluginTemplates.length; i++) {
