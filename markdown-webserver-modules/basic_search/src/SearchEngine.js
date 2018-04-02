@@ -2,30 +2,32 @@ var NO_RESULTS = -1;
 
 /** 
  * Very simple search implementation:
- *  - Does not order the results.
- *  - It can find only full matches.
- *  - It can find only the first match in a given file.
- * Should be evolved.
+ *  - Orders results by match count desc.
+ *  - It can find only non-case-sensitive full matches
+ *  - It can display only the first match in a given file.
  */
 class SearchEngine {
     doSearch(mdArray, query) {
         var resultArray = [];
+        var regex = new RegExp(query, "ig")
 
         for (var i = 0; i < mdArray.length; i++) {
             var file = mdArray[i];
-            var at = file.content.search(query);
+            var at = file.content.search(regex);
             if (at !== NO_RESULTS) {
-                resultArray.push(this.createResultObject(file, query, at));
+                var relevance = file.content.match(regex).length;
+                resultArray.push(this.createResultObject(file, query, at, relevance));
             }
         }
 
-        return resultArray;
+        return resultArray.sort(this.compareResults);
     }
 
-    createResultObject(file, query, at) {
+    createResultObject(file, query, at, relevance) {
         return {
             name: this.calculateName(file, query),
             path: file.path,
+            relevance: relevance,
             content: this.calculateContent(file, query, at)
         };
     }
@@ -51,6 +53,15 @@ class SearchEngine {
     getLineEnd(text, pos) {
         var textAfter = text.substring(pos);
         return textAfter.search("\n") + pos;
+    }
+
+    /**
+     * Orders results by relevance DESC
+     * @param {relevance, *} a 
+     * @param {relevance, *} b 
+     */
+    compareResults(a, b) {
+        return b.relevance - a.relevance;
     }
 }
 
