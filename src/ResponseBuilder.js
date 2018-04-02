@@ -11,6 +11,23 @@ class ResponseBuilder {
         this.marked = marked;
         this.templEngine.init();
         this.contentGenFactory.init(this.templEngine);
+        this.executeMarkedHacks();
+    }
+
+    /** 
+     * Rendering of table is changed so bootstrap will render it with borders.
+    */
+    executeMarkedHacks() {
+        marked.Renderer.prototype.table = function(header, body) {
+            return '<table class="table">\n'
+              + '<thead>\n'
+              + header
+              + '</thead>\n'
+              + '<tbody>\n'
+              + body
+              + '</tbody>\n'
+              + '</table>\n';
+          };
     }
     /** 
      * This should be called when a http request arrives. 
