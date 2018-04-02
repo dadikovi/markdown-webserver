@@ -10,8 +10,12 @@ class SearchContentGenerator {
 
     generateContent() {
         var query = decodeURIComponent(this.path);
-        var results = this.searchEngine.doSearch(this.dirLoader.getLeafArray(), query);
-        return this.templEngine.abstractRender(this.templateKey, { query: query, results: results });
+        if(query.trim().length <= 2) {
+            return "You should specify a longer search query!";
+        } else {
+            var results = this.searchEngine.doSearch(this.dirLoader.getLeafArray(), query);
+            return this.templEngine.abstractRender(this.templateKey, { query: query, results: results });
+        }        
     }
 }
 

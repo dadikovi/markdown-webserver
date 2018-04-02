@@ -9,11 +9,8 @@ class ResponseBuilder {
         this.ErrorHandler = require('./ErrorHandler');
         this.contentGenFactory = require('./ContentGeneratorFactory');
         this.marked = marked;
-
         this.templEngine.init();
         this.contentGenFactory.init(this.templEngine);
-
-        console.log("ResponseBuilder inited." + this.templEngine);
     }
     /** 
      * This should be called when a http request arrives. 

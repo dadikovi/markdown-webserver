@@ -17,7 +17,7 @@ class MarkdownWebserver {
         this.initDirLoader();
         this.initResponseBuilder();
         this.initPlugins();
-        this.handleResourceDirectory(rootPath);
+        this.handleResourceDirectory(this.rootPath);
     }
 
     initDirLoader() {
@@ -26,6 +26,7 @@ class MarkdownWebserver {
         dirLoader.init(this);
         dirLoader.parseDir(rootPath);
         console.log("INFO - Directory loader inited successfully.");
+        this.rootPath = rootPath;
     }
 
     initResponseBuilder() {

@@ -21,5 +21,5 @@ app.get('/*', function (req, res) {
 })
 
 app.listen(80, function () {
-    console.log('Webserver is listening on port 80!');
+    console.log('INFO - Webserver is listening on port 80!');
 });
