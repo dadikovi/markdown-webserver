@@ -5,13 +5,13 @@ var Mustache = require('mustache');
 class TemplateEngine {
     constructor() {
         this.templates = [{
-                name: "explorer",
-                content: null
-            },
-            {
-                name: "main",
-                content: null
-            }
+            name: "explorer",
+            content: null
+        },
+        {
+            name: "main",
+            content: null
+        }
         ];
     }
     init() {
@@ -20,7 +20,7 @@ class TemplateEngine {
         });
     }
     addPluginTemplates(pluginTemplates) {
-        for(var i = 0; i<pluginTemplates.length; i++) {
+        for (var i = 0; i < pluginTemplates.length; i++) {
             this.templates.push({
                 name: pluginTemplates[i].key,
                 content: fs.readFileSync(pluginTemplates[i].file, "utf8")

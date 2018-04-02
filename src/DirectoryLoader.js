@@ -15,6 +15,10 @@ class DirectoryLoader {
         this.server = server;
     }
 
+    /**
+     * This is the main method which reads the given root directory and parse it.
+     * @param {*} rootPath 
+     */
     parseDir(rootPath) {
         this.handleGitRepo(rootPath);
 
@@ -31,9 +35,9 @@ class DirectoryLoader {
     }
 
     handleGitRepo(root) {
-        if(this.isGitRepo) {
+        if (this.isGitRepo) {
             try {
-                require('simple-git')(root).pull(function() {
+                require('simple-git')(root).pull(function () {
                     console.log("INFO - Successfully pulled git repo.");
                 });
             } catch (e) {
@@ -61,7 +65,7 @@ class DirectoryLoader {
                     dirLoader.templateDir = {
                         files: dirLoader.discover(path.join(dir, file), rel + "/" + file, [])
                     };
-                } else if(file === ".git") {
+                } else if (file === ".git") {
                     dirLoader.isGitRepo = true;
                 } else {
                     mdStruct.push({
@@ -95,8 +99,8 @@ class DirectoryLoader {
 
     getLeafArray() {
         var array = [];
-        DirectoryLoader.doRecursive(this.markdownStructure, function(file) {
-            if(file.files === null) {
+        DirectoryLoader.doRecursive(this.markdownStructure, function (file) {
+            if (file.files === null) {
                 array.push(file);
             }
         });

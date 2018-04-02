@@ -12,7 +12,7 @@ class ResponseBuilder {
 
         this.templEngine.init();
         this.contentGenFactory.init(this.templEngine);
-        
+
         console.log("ResponseBuilder inited." + this.templEngine);
     }
     /** 
@@ -63,9 +63,9 @@ class ResponseBuilder {
      */
     addWidgets() {
         this.response.widgets_lmt = "";
-        for(var i = 0; i<this.widgets.length; i++) {
+        for (var i = 0; i < this.widgets.length; i++) {
             var widget = this.widgets[i];
-            if(widget.widgetArea == widgetArea.LEFT_MAIN_TOP) {
+            if (widget.widgetArea == widgetArea.LEFT_MAIN_TOP) {
                 this.response.widgets_lmt += " " + widget.htmlString;
             }
         }
@@ -112,6 +112,7 @@ class ResponseBuilder {
     registerStyles(styles) {
         this.styles = styles;
     }
+
     registerContentGenerators(contentGenerators) {
         this.contentGenFactory.registerPlugins(contentGenerators);
     }

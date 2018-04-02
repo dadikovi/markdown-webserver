@@ -8,29 +8,39 @@ var pluginContext = require('./MarkdownWebserverPluginContext');
 class MarkdownWebserver {
     /** 
      * This method must be called before webserver fully started.
-     * It reads the provided markdown directory structure.
+     * The full initialization of webserver is done here, the order of elements is important.
      */
     init(app, express) {
         this.app = app;
         this.express = express;
         this.plugins = pluginLoader.getPlugins();
-
-        var rootPath = this.parseRootPath();
-        this.checkIfPathExists(rootPath);
-        dirLoader.init(this);
-        dirLoader.parseDir(rootPath);
-        responseBuilder.init(dirLoader);
+        this.initDirLoader();
+        this.initResponseBuilder();
         this.initPlugins();
         this.handleResourceDirectory(rootPath);
     }
 
+    initDirLoader() {
+        var rootPath = this.parseRootPath();
+        this.checkIfPathExists(rootPath);
+        dirLoader.init(this);
+        dirLoader.parseDir(rootPath);
+        console.log("INFO - Directory loader inited successfully.");
+    }
+
+    initResponseBuilder() {
+        responseBuilder.init(dirLoader);
+        console.log("INFO - Response builder inited successfully.");
+    }
+
     initPlugins() {
         var context = this.createPluginContext();
-        for(var i = 0; i<this.plugins.length; i++) {
+        for (var i = 0; i < this.plugins.length; i++) {
             this.plugins[i].object.init(context);
         }
         this.processContext(context);
         this.pluginsInited = true;
+        console.log("INFO - Plugins inited successfully.");
     }
 
     /** 
@@ -42,9 +52,9 @@ class MarkdownWebserver {
     }
 
     reloadPlugins() {
-        if(this.pluginsInited) {
+        if (this.pluginsInited) {
             var context = this.createPluginContext();
-            for(var i = 0; i<this.plugins.length; i++) {
+            for (var i = 0; i < this.plugins.length; i++) {
                 this.plugins[i].object.reload(context);
             }
         }
@@ -52,11 +62,11 @@ class MarkdownWebserver {
 
     createPluginContext() {
         return pluginContext
-                        .Builder
-                        .addMarkdownWebserver(this)
-                        .addDirLoader(dirLoader)
-                        .addTemplEngine(responseBuilder.templEngine)
-                        .build();
+            .Builder
+            .addMarkdownWebserver(this)
+            .addDirLoader(dirLoader)
+            .addTemplEngine(responseBuilder.templEngine)
+            .build();
     }
 
     processContext(context) {
@@ -66,15 +76,33 @@ class MarkdownWebserver {
         responseBuilder.registerContentGenerators(context.contentGenerators);
         responseBuilder.templEngine.addPluginTemplates(context.templateFiles);
 
-        for(var i=0; i<context.resourceDirs.length; i++) {
+        for (var i = 0; i < context.resourceDirs.length; i++) {
             this.app.use(this.express.static(context.resourceDirs[i]));
         }
     }
 
+    // TODO this is a poor solution for static resource handling...
     handleResourceDirectory(rootPath) {
         var resourceDir = path.join(rootPath, ".resources")
         console.log("INFO - resource directory: " + resourceDir);
         this.app.use(this.express.static("testdir/.resources"));
+    }
+
+    /**
+     * This method is called when a request arrives to application.
+     * @param {} req 
+     */
+    processRequest(req) {
+        return responseBuilder
+            .reset()
+            .addName()
+            .addContent(req.path)
+            .addCopyRight()
+            .addExplorer()
+            .addWidgets()
+            .addStyles()
+            .addScripts()
+            .toHtml()
     }
 
     checkIfPathExists(path) {
@@ -86,28 +114,15 @@ class MarkdownWebserver {
         }
     }
 
-    processRequest(req) {
-        return responseBuilder
-                .reset()
-                .addName()
-                .addContent(req.path)
-                .addCopyRight()
-                .addExplorer()
-                .addWidgets()
-                .addStyles()
-                .addScripts()
-                .toHtml()
-    }
-    
     parseRootPath() {
         var rootPath = "";
-    
+
         for (var i = 0; i < process.argv.length; i++) {
             if (process.argv[i] === "-p") {
                 rootPath = process.argv[i + 1];
             }
         }
-    
+
         if (rootPath === "") {
             console.log("ERROR - Please define the path of your root markdown directory with -p option!");
             process.exit();

@@ -11,10 +11,10 @@ class SearchEngine {
     doSearch(mdArray, query) {
         var resultArray = [];
 
-        for(var i = 0; i<mdArray.length; i++) {
+        for (var i = 0; i < mdArray.length; i++) {
             var file = mdArray[i];
             var at = file.content.search(query);
-            if(at !== NO_RESULTS) {
+            if (at !== NO_RESULTS) {
                 resultArray.push(this.createResultObject(file, query, at));
             }
         }
