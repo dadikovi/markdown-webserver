@@ -9,7 +9,6 @@ module.exports = class MarkdownWebserverPluginContext {
         this.widgets = [];
         this.scripts = [];
         this.styles = [];
-        this.resourceDirs = [];
         this.contentGenerators = [];
         this.templateFiles = [];
     }
@@ -58,10 +57,7 @@ module.exports = class MarkdownWebserverPluginContext {
      * @param {path} script 
      */
     registerUiScript(script) {
-        if(!this.resourceDirs.includes(path.dirname(script.path))) {
-            this.resourceDirs.push(path.dirname(script.path));
-        }
-        script.path = path.basename(script.path);
+        script.path = script.path;
         this.scripts.push(script);
 
     }
@@ -71,10 +67,7 @@ module.exports = class MarkdownWebserverPluginContext {
      * @param {path} style 
      */
     registerStyle(style) {
-        if(!this.resourceDirs.includes(path.dirname(style.path))) {
-            this.resourceDirs.push(path.dirname(style.path));
-        }
-        style.path = path.basename(style.path);
+        style.path = style.path;
         this.styles.push(style);
     }
 

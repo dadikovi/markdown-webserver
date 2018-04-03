@@ -9,11 +9,11 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <!-- FontAwesome -->
         <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
-        <link rel="stylesheet/less" href="/style.less" id="main">
-        <link rel="stylesheet/less" href="/explorer.less" id="explorer">
+        <link rel="stylesheet/less" href="/resources/style.less" id="main">
+        <link rel="stylesheet/less" href="/resources/explorer.less" id="explorer">
         
         {{#styles}}
-        <link rel="stylesheet" href="/{{path}}">
+        <link rel="stylesheet" href="/markdown-webserver-modules/{{path}}">
         {{/styles}}
 
         <!-- Less -->
@@ -46,9 +46,9 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="/explorer.js"></script>
+<script type="text/javascript" src="/resources/explorer.js"></script>
 {{#scripts}}
-<script type="text/javascript" src="/{{path}}"></script>
+<script type="text/javascript" src="/markdown-webserver-modules/{{path}}"></script>
 {{/scripts}}
 </body>
 </html>

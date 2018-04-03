@@ -15,10 +15,10 @@ class BasicSearch {
             widgetArea : markdownWebserverPluginContext.widgetArea.LEFT_MAIN_TOP
         });
         markdownWebserverPluginContext.registerUiScript({
-            path: path.join(__dirname, 'resources/search.ui.js')
+            path: path.join('basic_search', 'resources', 'search.ui.js')
         });
         markdownWebserverPluginContext.registerStyle({
-            path: path.join(__dirname, 'resources/search.css')
+            path: path.join('basic_search', 'resources', 'search.css')
         });
         markdownWebserverPluginContext.registerContentGenerator(this);
         markdownWebserverPluginContext.registerTemplate(path.join(__dirname, 'templates', SEARCH_RESULT_TEMPLATE), SEATCH_RESULT_TEMPLATE_KEY);

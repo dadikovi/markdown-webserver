@@ -17,7 +17,6 @@ class MarkdownWebserver {
         this.initDirLoader();
         this.initResponseBuilder();
         this.initPlugins();
-        this.handleResourceDirectory(this.rootPath);
     }
 
     initDirLoader() {
@@ -76,17 +75,6 @@ class MarkdownWebserver {
         responseBuilder.registerStyles(context.styles);
         responseBuilder.registerContentGenerators(context.contentGenerators);
         responseBuilder.templEngine.addPluginTemplates(context.templateFiles);
-
-        for (var i = 0; i < context.resourceDirs.length; i++) {
-            this.app.use(this.express.static(context.resourceDirs[i]));
-        }
-    }
-
-    // TODO this is a poor solution for static resource handling...
-    handleResourceDirectory(rootPath) {
-        var resourceDir = path.join(rootPath, ".resources")
-        console.log("INFO - resource directory: " + resourceDir);
-        this.app.use(this.express.static("testdir/.resources"));
     }
 
     /**
@@ -94,16 +82,35 @@ class MarkdownWebserver {
      * @param {} req 
      */
     processRequest(req) {
+        try {
+            return responseBuilder
+                .reset()
+                .addName()
+                .addContent(req.path)
+                .addCopyRight()
+                .addExplorer()
+                .addWidgets()
+                .addStyles()
+                .addScripts()
+                .toHtml()
+        } catch (e) {
+            if (e.reason !== undefined && e.reason === "NOT_FOUND") {
+                return null;
+            }
+        }
+    }
+
+    notFoundPage() {
         return responseBuilder
-            .reset()
-            .addName()
-            .addContent(req.path)
-            .addCopyRight()
-            .addExplorer()
-            .addWidgets()
-            .addStyles()
-            .addScripts()
-            .toHtml()
+                .reset()
+                .addName()
+                .addNotFoundContent()
+                .addCopyRight()
+                .addExplorer()
+                .addWidgets()
+                .addStyles()
+                .addScripts()
+                .toHtml();
     }
 
     checkIfPathExists(path) {

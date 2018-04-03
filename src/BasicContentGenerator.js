@@ -7,14 +7,7 @@ class BasicContentGenerator {
     }
 
     generateContent() {
-        try {
-            var content = this.dirLoader.getContent(this.path);
-        } catch (e) {
-            if (e.reason !== undefined && e.reason === "NOT_FOUND") {
-                return this.ErrorHandler.getNotFoundContent(this.dirLoader);
-            }
-        }
-
+        var content = this.dirLoader.getContent(this.path);
         if (content === undefined || content === null) {
             return this.ErrorHandler.getEmptyContent(this.dirLoader);
         }

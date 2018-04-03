@@ -54,6 +54,11 @@ class ResponseBuilder {
         return this;
     }
 
+    addNotFoundContent() {
+        this.response.content = marked(this.ErrorHandler.getNotFoundContent(this.dirLoader));
+        return this;
+    }
+
     /** 
      * Adds the copyright information to the response object.
      * The information can be declared in `COPYRIGHT.md` user template.
