@@ -28,6 +28,17 @@ class ResponseBuilder {
               + '</tbody>\n'
               + '</table>\n';
           };
+	marked.Renderer.prototype.image = function(href, title, text) {
+	  if (this.options.baseUrl && !originIndependentUrl.test(href)) {
+	    href = resolveUrl(this.options.baseUrl, href);
+	  }
+	  var out = '<img class="img-responsive" src="' + href + '" alt="' + text + '"';
+	  if (title) {
+	    out += ' title="' + title + '"';
+	  }
+	  out += this.options.xhtml ? '/>' : '>';
+	  return out;
+	};
     }
     /** 
      * This should be called when a http request arrives. 
