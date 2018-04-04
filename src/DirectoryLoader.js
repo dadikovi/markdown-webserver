@@ -1,15 +1,12 @@
 var fs = require('fs');
-const path = require('path');
+var path = require('path');
 var BreakException = {};
 var NotFoundException = {
     reason: "NOT_FOUND"
 };
+var DirectoryLoaderHelper = require('./DirectoryLoaderHelper');
 
 class DirectoryLoader {
-
-    static get REFRESH_TIMEOUT() {
-        return 5 * 60 * 1000;
-    }
 
     init(server) {
         this.server = server;
@@ -21,17 +18,16 @@ class DirectoryLoader {
      */
     parseDir(rootPath) {
         this.handleGitRepo(rootPath);
-
-        var dirName = this.parseName(rootPath);
-        this.templateDir = null;
         this.markdownStructure = {
-            name: dirName,
-            files: this.discover(rootPath, "", [])
+            name: DirectoryLoaderHelper.parseName(rootPath), // used as page title
+            files: this.discover(rootPath, "", []) // the actual structure
         };
+        this.parseComplete(rootPath);
+    }
 
+    parseComplete(rootPath) {
         this.server.directoryReloaded();
-
-        this.scheduleNextParse(this, rootPath);
+        DirectoryLoaderHelper.scheduleNextParse(this, rootPath);
     }
 
     handleGitRepo(root) {
@@ -46,13 +42,12 @@ class DirectoryLoader {
         }
     }
 
-    scheduleNextParse(dirLoader, rootPath) {
-        setTimeout(function () {
-            dirLoader.parseDir(rootPath);
-        }, DirectoryLoader.REFRESH_TIMEOUT);
-        console.log("INFO - state refreshed.");
-    }
-
+    /**
+     * This method can discover the given directory recoursively.
+     * @param {*} dir - a string returned by path.join() method 
+     * @param {*} rel - relative url to served root directory
+     * @param {name, path, content, files} mdStruct - the structure to fill
+     */
     discover(dir, rel, mdStruct) {
         var mdStruct = mdStruct || [];
         var files = fs.readdirSync(dir);
@@ -90,16 +85,19 @@ class DirectoryLoader {
             }
         });
 
-        return mdStruct.sort(this.compareDirectory);
+        return mdStruct.sort(DirectoryLoaderHelper.compareDirectory);
     }
 
     getMarkdownStructure() {
         return this.markdownStructure;
     }
 
+    /** 
+     * Return only files (not directories)
+    */
     getLeafArray() {
         var array = [];
-        DirectoryLoader.doRecursive(this.markdownStructure, function (file) {
+        DirectoryLoaderHelper.doRecursive(this.markdownStructure, function (file) {
             if (file.files === null) {
                 array.push(file);
             }
@@ -108,11 +106,16 @@ class DirectoryLoader {
         return array;
     }
 
+    /**
+     * Returns an element of this.markdownStructure specified by url string.
+     * Also sets isSelected and isSelectedParent attributes of nodes on the way.
+     * @param {*} path 
+     */
     getContent(path) {
         var levels = path.split("/");
         var content_i = this.markdownStructure;
         for (var i = 0; i < levels.length; i++) {
-            content_i = this.get(content_i, decodeURIComponent(levels[i]));
+            content_i = DirectoryLoaderHelper.get(content_i, decodeURIComponent(levels[i]));
             content_i.isSelectedParent = true;
         }
         content_i.isSelectedParent = false;
@@ -120,64 +123,23 @@ class DirectoryLoader {
         return content_i.content;
     }
 
+    /** 
+     * This is called when the processing of a new request started.
+     * Resets the request-specific state of this object.
+    */
     reset() {
         this.resetSelectedState();
     }
 
     resetSelectedState() {
-        DirectoryLoader.doRecursive(this.markdownStructure, function (file) {
+        DirectoryLoaderHelper.doRecursive(this.markdownStructure, function (file) {
             file.isSelected = false;
             file.isSelectedParent = false;
         })
     }
 
-    static doRecursive(element, method) {
-        element.files.forEach(function (file) {
-            method(file);
-            if (file.files !== null) {
-                DirectoryLoader.doRecursive(file, method);
-            }
-        });
-    }
-
     getUserTemplate(key) {
-        return this.get(this.templateDir, key);
-    }
-
-    get(struct, key) {
-        var value = undefined;
-
-        try {
-            struct.files.forEach(function (file) {
-                if (file.name === key) {
-                    value = file;
-                    throw BreakException;
-                }
-            });
-        } catch (e) {
-            if (e !== BreakException) throw e;
-        }
-
-        if (value === undefined) {
-            console.log("WARNING! Requested key did not found: " + key);
-            throw NotFoundException;
-        } else {
-            return value;
-        }
-    }
-
-    parseName(rootPath) {
-        return path.basename(rootPath);
-    }
-
-    compareDirectory(a, b) {
-        if (a.files !== null && b.files === null) {
-            return -1;
-        } else if (b.files !== null && a.files === null) {
-            return 1;
-        } else {
-            return a.name - b.name;
-        }
+        return DirectoryLoaderHelper.get(this.templateDir, key);
     }
 };
 
