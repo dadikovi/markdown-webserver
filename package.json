@@ -4,7 +4,8 @@
   "description": "This is a simple application which can turn a markdown directory structure to a webserver",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec",
+    "start": "node index.js"
   },
   "author": "dadikovi <dadikovi@gmail.com> (dadikovi.github.io)",
   "license": "Apache-2.0",
