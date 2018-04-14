@@ -9,6 +9,7 @@ module.exports = class MarkdownWebserverPluginContext {
         this.widgets = [];
         this.scripts = [];
         this.styles = [];
+        this.builders = [];
         this.contentGenerators = [];
         this.templateFiles = [];
     }
@@ -91,5 +92,15 @@ module.exports = class MarkdownWebserverPluginContext {
             file: file,
             key: key
         });
+    }
+
+    /**
+     * Registers a new response builder which can add custom fields to the response object which is used by response generation.
+     * The added fields can be used by templates.
+     * The given object must have a function named "addResponseFields" with the "response" attribute.
+     * @param {*} obj 
+     */
+    registerResponseBuilder(obj) {
+        this.builders.push(obj);
     }
 }

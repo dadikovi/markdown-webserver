@@ -50,7 +50,7 @@ class TemplateEngine {
         });
     }
     abstractRender(name, data) {
-        return Mustache.to_html(this.getTemplateContent(name), data);
+        return Mustache.to_html(Mustache.to_html(this.getTemplateContent(name), data), data);
     }
     renderMain(data) {
         return this.abstractRender("main", data);

@@ -102,6 +102,14 @@ class ResponseBuilder {
         return this;
     }
 
+    addPluginData() {
+        for(var i = 0; i<this.builders.length; i++) {
+            console.log("DEBUG - request plugin to add data...");
+            this.builders[i].addResponseFields(this.response);
+        }
+        return this;
+    }
+
     addStyles() {
         this.response.styles = this.styles;
         return this;
@@ -141,6 +149,10 @@ class ResponseBuilder {
 
     registerStyles(styles) {
         this.styles = styles;
+    }
+
+    registerResponseBuilders(builders) {
+        this.builders = builders;
     }
 
     registerContentGenerators(contentGenerators) {

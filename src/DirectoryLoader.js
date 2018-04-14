@@ -12,28 +12,35 @@ class DirectoryLoader {
         this.server = server;
     }
 
+    parseDir(rootPath) {
+        this.parseDir(rootPath, true);
+    }
     /**
      * This is the main method which reads the given root directory and parse it.
      * @param {*} rootPath 
      */
-    parseDir(rootPath) {
-        this.handleGitRepo(rootPath);
+    parseDir(rootPath, scheduleNextParse) {
+        this.rootPath = rootPath;
+        this.handleGitRepo();
         this.markdownStructure = {
-            name: DirectoryLoaderHelper.parseName(rootPath), // used as page title
-            files: this.discover(rootPath, "", []) // the actual structure
+            name: DirectoryLoaderHelper.parseName(this.rootPath), // used as page title
+            files: this.discover(this.rootPath, "", []) // the actual structure
         };
-        this.parseComplete(rootPath);
+        this.parseComplete(scheduleNextParse);
     }
 
-    parseComplete(rootPath) {
+    parseComplete(scheduleNextParse) {
         this.server.directoryReloaded();
-        DirectoryLoaderHelper.scheduleNextParse(this, rootPath);
+        this.lastReload = new Date();
+        if(scheduleNextParse) {
+            DirectoryLoaderHelper.scheduleNextParse(this, this.rootPath);
+        }
     }
 
-    handleGitRepo(root) {
+    handleGitRepo() {
         if (this.isGitRepo) {
             try {
-                require('simple-git')(root).pull(function () {
+                require('simple-git')(this.rootPath).pull(function () {
                     console.log("INFO - Successfully pulled git repo.");
                 });
             } catch (e) {

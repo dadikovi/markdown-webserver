@@ -74,6 +74,7 @@ class MarkdownWebserver {
         responseBuilder.registerScripts(context.scripts);
         responseBuilder.registerStyles(context.styles);
         responseBuilder.registerContentGenerators(context.contentGenerators);
+        responseBuilder.registerResponseBuilders(context.builders);
         responseBuilder.templEngine.addPluginTemplates(context.templateFiles);
     }
 
@@ -89,6 +90,7 @@ class MarkdownWebserver {
                 .addContent(req.path)
                 .addCopyRight()
                 .addExplorer()
+                .addPluginData()
                 .addWidgets()
                 .addStyles()
                 .addScripts()
@@ -107,6 +109,7 @@ class MarkdownWebserver {
                 .addNotFoundContent()
                 .addCopyRight()
                 .addExplorer()
+                .addPluginData()
                 .addWidgets()
                 .addStyles()
                 .addScripts()
